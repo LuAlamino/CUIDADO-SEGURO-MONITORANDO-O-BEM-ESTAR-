@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Geolocation</title>
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" />
+	<link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+		}
+
+		.leaflet-marker-icon,
+		.leaflet-marker-shadow {
+			display: none !important;
+		}
+
+		.pointers,
+		.idoso-pointers {
+			display: block !important;
+		}
+	</style>
+
+</head>
+
+<body>
+	<div id="map" style="width:100%; height: 100vh"></div>
+	<script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"></script>
+	<script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+
+
+	<script>
+		// Personalizar css no mapa
+		let myCustomColourUser = 'background-color: red;'
+		const markerHtml = `
+			width: 3rem;
+			height: 3rem;
+			display: block;
+			left: -1.5rem;
+			top: -1.5rem;
+			position: relative;
+			border-radius: 3rem 3rem 0;
+			transform: rotate(45deg);
+			border: 3px solid #FFFFFF;`
+
+		// Coordenadas do Ponta A - Idoso
+		const coordIdoso = [-11.732997565990585, -61.78596675395966];
+		// Coordenadas do Ponta B - Cuidador
+		const coordCuidador = [-11.73094, -61.7925];
+
+		// Iniciar o mapa com coordenadas do ponto A
+		const map = L.map('map').setView(coordIdoso, 40);
+
+		L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png').addTo(map);
+
+
+		// Personalizar Ponto na mapa com imagem do Idoso.
+		const idosoIcon = L.icon({
+			className: "idoso-pointers",
+			iconUrl: 'idoso.png',
+			iconSize: [45, 45]
+		})
+		const marker = L.marker(coordIdoso, { icon: idosoIcon }).addTo(map);
+
+		function startService () {
+			// Array de coordenadas. Simula o idoso enviando a localização para o APP.
+			const latlng = [
+				{ lat: -11.733, lng: -61.78595 },
+				{ lat: -11.73379, lng: -61.78597 },
+				{ lat: -11.73379, lng: -61.78597 },
+				{ lat: -11.73381, lng: -61.78605 },
+				{ lat: -11.73383, lng: -61.78613 },
+				{ lat: -11.7338, lng: -61.78649 },
+				{ lat: -11.7338, lng: -61.78659 },
+				{ lat: -11.73383, lng: -61.78687 },
+				{ lat: -11.7338, lng: -61.78715 },
+				{ lat: -11.7338, lng: -61.78724 },
+				{ lat: -11.73381, lng: -61.78808 },
+				{ lat: -11.7338, lng: -61.79009 },
+				{ lat: -11.73378, lng: -61.79223 },
+				{ lat: -11.73378, lng: -61.79223 },
+				{ lat: -11.73291, lng: -61.79224 },
+				{ lat: -11.73291, lng: -61.79224 },
+				{ lat: -11.7328, lng: -61.79223 },
+				{ lat: -11.73279, lng: -61.79303 },
+				{ lat: -11.73279, lng: -61.79303 },
+				{ lat: -11.73094, lng: -61.79298 },
+				{ lat: -11.73094, lng: -61.79298 },
+				{ lat: -11.73094, lng: -61.7925 }
+			]
+
+		   // Personalizar Ponto na mapa com imagem do Usuário.
+			const icon = L.divIcon({
+				className: "pointers",
+				iconAnchor: [0, 24],
+				labelAnchor: [-6, 0],
+				popupAnchor: [0, -36],
+				html: `<span style="${markerHtml}${myCustomColourUser}" />`
+			})
+			var newMarker = L.marker([coordCuidador[0], coordCuidador[1]], { icon }).addTo(map);
+
+			// Identifica a melhor rota para iniciar a viagem.
+			L.Routing.control({
+				waypoints: [
+					L.latLng(coordIdoso[0], coordIdoso[1]),
+					L.latLng(coordCuidador[0], coordCuidador[1])
+				]
+			}).on('routesfound', function (e) {
+				// Loop de coordenadas. Simula o idoso enviando a localização para o APP.
+				latlng.forEach(function (coord, index) {
+					setTimeout(function () {
+						marker.setLatLng([coord.lat, coord.lng]);
+						// Identifica o final da viagem.
+						if (coord.lat === coordCuidador[0] && coord.lng === coordCuidador[1]) {
+							alert('O idoso acabou de chegar!')
+						}
+					}, 1000 * index)
+				})
+
+			}).addTo(map);
+		};
+
+		startService()
+
+	</script>
+
+
+</body>
+
+</html>
+
+"formulario"
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário | GN</title>
+    <style>
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            background-image: linear-gradient(to right, rgb(20, 220, 210), rgb(17, 47, 71));
+        }
+        .box{
+            color: white;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 15px;
+            border-radius: 15px;
+            width: 20%;
+        }
+        fieldset{
+            border: 3px solid rgb(30, 184, 255)4, 255);
+        }
+        legend{
+            border: 1px solid rgb(30, 191, 255);
+            padding: 10px;
+            text-align: center;
+            background-color: dodgerblue;
+            border-radius: 8px;
+        }
+        .inputBox{
+            position: relative;
+        }
+        .inputUser{
+            background: none;
+            border: none;
+            border-bottom: 1px solid white;
+            outline: none;
+            color: white;
+            font-size: 15px;
+            width: 100%;
+            letter-spacing: 2px;
+        }
+        .labelInput{
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            pointer-events: none;
+            transition: .5s;
+        }
+        .inputUser:focus ~ .labelInput,
+        .inputUser:valid ~ .labelInput{
+            top: -20px;
+            font-size: 12px;
+            color: rgb(30, 229, 255)4, 255);
+        }
+        #data_nascimento{
+            border: none;
+            padding: 8px;
+            border-radius: 10px;
+            outline: none;
+            font-size: 15px;
+        }
+        #submit{
+            background-image: linear-gradient(to right,rgb(0, 125, 197), rgb(90, 20, 220));
+            width: 100%;
+            border: none;
+            padding: 15px;
+            color: white;
+            font-size: 15px;
+            cursor: pointer;
+            border-radius: 10px;
+        }
+        #submit:hover{
+            background-image: linear-gradient(to right,rgb(0, 138, 172), rgb(19, 145, 195));
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <form action="">
+            <fieldset>
+                <legend><b>Cadastre-se na Cuidado Seguro</b></legend>
+                <br>
+                <div class="inputBox">
+                    <input type="text" name="nome" id="nome" class="inputUser" required>
+                    <label for="nome" class="labelInput">Nome completo</label>
+                </div>
+                <br><br>
+                <div class="inputBox">
+                    <input type="text" name="email" id="email" class="inputUser" required>
+                    <label for="email" class="labelInput">Email</label>
+                </div>
+                <br><br>
+                <div class="inputBox">
+                    <input type="tel" name="telefone" id="telefone" class="inputUser" required>
+                    <label for="telefone" class="labelInput">Telefone</label>
+                </div>
+                <p>Sexo:</p>
+                <input type="radio" id="feminino" name="genero" value="feminino" required>
+                <label for="feminino">Feminino</label>
+                <br>
+                <input type="radio" id="masculino" name="genero" value="masculino" required>
+                <label for="masculino">Masculino</label>
+                <br>
+                <input type="radio" id="outro" name="genero" value="outro" required>
+                <label for="outro">Outro</label>
+                <br><br>
+                <label for="data_nascimento"><b>Data de Nascimento:</b></label>
+                <input type="date" name="data_nascimento" id="data_nascimento" required>
+                <br><br><br>
+                <div class="inputBox">
+                    <input type="text" name="cidade" id="cidade" class="inputUser" required>
+                    <label for="cidade" class="labelInput">Cidade</label>
+                </div>
+                <br><br>
+                <div class="inputBox">
+                    <input type="text" name="estado" id="estado" class="inputUser" required>
+                    <label for="estado" class="labelInput">Estado</label>
+                </div>
+                <br><br>
+                <div class="inputBox">
+                    <input type="text" name="endereco" id="endereco" class="inputUser" required>
+                    <label for="endereco" class="labelInput">Endereço</label>
+                </div>
+                <br><br>
+                <input type="submit" name="submit" id="submit">
+            </fieldset>
+        </form>
+    </div>
+</body>
+</html>
+
+"tela de login "
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tela de login</title>
+    <style>
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            background-image: linear-gradient(45deg, rgba(0, 217, 255, 0.63), rgba(30, 169, 187, 0.658));
+        }
+        div{
+            background-color: rgba(0, 0, 0, 0.8);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            padding: 80px;
+            border-radius: 15px;
+            color: #fff;
+        }
+        input{
+            padding: 15px;
+            border: none;
+            outline: none;
+            font-size: 15px;
+        }
+        button{
+            background-color: dodgerblue;
+            border: none;
+            padding: 15px;
+            width: 100%;
+            border-radius: 10px;
+            color: white;
+            font-size: 15px;
+            
+        }
+        button:hover{
+            background-color: deepskyblue;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h1>Entre na sua conta Cuidado Seguro</h1>
+        <input type="text" placeholder="Nome">
+        <br><br>
+        <input type="password" placeholder="Senha">
+        <br><br>
+        <button>Enviar</button>
+    </div>
+</body>
+</html>
+
+
