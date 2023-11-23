@@ -1,0 +1,22 @@
+-- Criar a tabela para armazenar informações pessoais
+CREATE TABLE IF NOT EXISTS Pessoa (
+    ID INT PRIMARY KEY AUTO_INCREMENT,
+    Nome VARCHAR(255) NOT NULL,
+    CPF VARCHAR(14) UNIQUE NOT NULL,
+    DataNascimento DATE NOT NULL
+
+-- Criar a tabela para armazenar informações de dependentes
+CREATE TABLE IF NOT EXISTS Dependentes (
+    ID INT PRIMARY KEY AUTO_INCREMENT,
+    PessoaID INT,
+    Nome VARCHAR(255) NOT NULL,
+    CPF VARCHAR(14) UNIQUE NOT NULL,
+    DataNascimento DATE NOT NULL,
+    FOREIGN KEY (PessoaID) REFERENCES Pessoas(ID)
+
+-- Inserir dados na tabela Pessoa
+INSERT INTO Pessoa (Nome, CPF, DataNascimento);
+
+
+-- Inserir dados na tabela Dependentes
+INSERT INTO Dependentes (PessoaID, Nome, CPF, DataNascimento);
